@@ -1,0 +1,22 @@
+﻿@model string
+
+<div class="jumbotron">
+    @if (User?.Identity?.IsAuthenticated ?? false)
+    {
+        <h1>Welcome, @User.Identity.Name</h1>
+
+        <p>
+            @ViewBag.UserName
+            @ViewBag.Token
+        </p> @Html.ActionLink("Test", "Test")
+        <a class="btn btn-lg btn-danger" href="/signout?returnUrl=%2F">Sign out</a>
+
+    }
+
+    else
+    {
+        <h1>Welcome, anonymous</h1>
+        <a class="btn btn-lg btn-success" href="/signin?returnUrl=%2F">Sign in</a>
+
+    }
+</div>
