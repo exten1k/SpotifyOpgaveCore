@@ -69,7 +69,7 @@ namespace SpotifyOpgaveCore
 
 
             services.AddMvc();
-            var connection = @"Server=(localdb)\mssqllocaldb;Database=EFGetStarted.AspNetCore.NewDb;Trusted_Connection=True;ConnectRetryCount=0";
+            var connection = @"Data Source=nl1-wsq1.a2hosting.com; Initial Catalog=spotifya_spot; User ID=spotifya_test; Password='Test123';";
             services.AddDbContext<RoomContext>
                 (options => options.UseSqlServer(connection));
         }
@@ -77,6 +77,7 @@ namespace SpotifyOpgaveCore
         public void Configure(IApplicationBuilder app)
         {
             app.UseStaticFiles();
+            app.UseDeveloperExceptionPage();
 
             app.UseAuthentication();
             app.UseMvcWithDefaultRoute();
