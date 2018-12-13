@@ -10,7 +10,21 @@
             @ViewBag.Token
         </p> @Html.ActionLink("Test", "Test")
         <a class="btn btn-lg btn-danger" href="/signout?returnUrl=%2F">Sign out</a>
+        <div class="col-6" style="text-align:center;">
+            <button class="btn btn-primary" id="myBtn" style="height: 50%; text-align:center;">Join playlist</button>
 
+            <div id="myModal" class="modal">
+                <div class="modal-content">
+                    <h2>Join en playlist</h2>
+                    <span class="close">&times;</span>
+                    <p>Få koden til din vens playliste for at joine den så du kan stemme på de sange du gerne vil høre</p>
+                    <form action="@Url.Action("Details","Rooms")"method="post">
+                        Indtast koden: <input type="text" name="ID"><br>
+                        <input type="submit" value="Join playlist">
+                    </form>
+                </div>
+            </div>
+        </div>
     }
 
     else
@@ -19,4 +33,7 @@
         <a class="btn btn-lg btn-success" href="/signin?returnUrl=%2F">Sign in</a>
 
     }
+    
 </div>
+
+<script src="~/js/modal.js"></script>
