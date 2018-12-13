@@ -18,6 +18,7 @@ namespace SpotifyOpgaveCore.Models
         public int RoomId { get; set; }
         public string Owner { get; set; }
         public string Name { get; set; }
+        private string Password { get; set; }
 
         public ICollection<Song> Songs {get;set;}
     }
