@@ -29,14 +29,14 @@ namespace SpotifyOpgaveCore.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("Home/Test");
             }
 
             var room = await _context.Rooms
                 .SingleOrDefaultAsync(m => m.RoomId == id);
             if (room == null)
             {
-                return NotFound();
+                return View("~Home/Test");
             }
 
             return View(room);
