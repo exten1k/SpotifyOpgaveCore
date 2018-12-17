@@ -1,12 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc;
 using SpotifyAPI.Web;
 using SpotifyAPI.Web.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 
-namespace HovedopgaveSpotify.Controllers
+namespace SpotifyOpgaveCore.Controllers
 {
     public class PlayerController : Controller
     {
@@ -17,13 +19,13 @@ namespace HovedopgaveSpotify.Controllers
         {
             return View();
         }
-        public string GetDevice(string access_token)
+        public async Task<string> GetDeviceAsync()
         {
             string deviceID = "";
             _spotify = new SpotifyWebAPI()
             {
                 //TODO Get token from session
-                AccessToken = access_token,
+                AccessToken = await HttpContext.GetTokenAsync("Spotify", "access_token"),
                 TokenType = "Bearer"
             };
             if (_spotify.AccessToken != null)
@@ -37,31 +39,32 @@ namespace HovedopgaveSpotify.Controllers
             }
             return deviceID;
         }
-        //public void Play(string access_token) {
-        //    string device = GetDevice(access_token);
-
-        //    ErrorResponse error = _spotify.ResumePlayback(device);
-        //}
-        public void Pause(string access_token)
+        public async void Play()
         {
-            string device = GetDevice(access_token);
+            string device = await GetDeviceAsync();
+
+            ErrorResponse error = _spotify.ResumePlayback(device);
+        }
+        public async void Pause()
+        {
+            string device = await GetDeviceAsync();
 
             ErrorResponse error = _spotify.PausePlayback(device);
 
         }
-        public void SkipToNext(string access_token)
+        public async void SkipToNext()
         {
-            string device = GetDevice(access_token);
+            string device = await GetDeviceAsync();
             ErrorResponse error = _spotify.SkipPlaybackToNext(device);
         }
-        public void SkipToPrev(string access_token)
+        public async void SkipToPrev()
         {
-            string device = GetDevice(access_token);
+            string device = await GetDeviceAsync();
             ErrorResponse error = _spotify.SkipPlaybackToPrevious(device);
         }
-        public void VolumeControl(string access_token,int volume)
+        public async void VolumeControl(int volume)
         {
-            string device = GetDevice(access_token);
+            string device = await GetDeviceAsync();
             ErrorResponse error = _spotify.SetVolume(volume,device);
         }
 

@@ -1,0 +1,54 @@
+﻿.navbar {
+    background-image: url('../Images/Unavngivet.png');
+    font-weight: 900;
+}
+
+
+/* Style the list */
+.breadcrumb {
+    margin-top:0px;
+}
+ul.breadcrumb {
+    padding: 10px 16px;
+    list-style: none;
+    background-color: #eee;
+}
+
+    /* Display list items side by side */
+    ul.breadcrumb li {
+        display: inline;
+        font-size: 18px;
+    }
+
+        /* Add a slash symbol (/) before/behind each list item */
+        ul.breadcrumb li + li:before {
+            padding: 8px;
+            color: black;
+            content: "/\00a0";
+        }
+
+        /* Add a color to all links inside the list */
+        ul.breadcrumb li a {
+            color: #0275d8;
+            text-decoration: none;
+        }
+
+            /* Add a color on mouse-over */
+            ul.breadcrumb li a:hover {
+                color: #01447e;
+                text-decoration: underline;
+            }
+.footer {
+    border-top: none;
+    font-weight: 900;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 120px;
+    bottom: 0;
+    width: 100%;
+    background-image: url(../Images/Unavngivet.png);
+}
+.social {
+        justify-content: flex-start;
+    }

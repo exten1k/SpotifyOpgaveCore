@@ -43,13 +43,16 @@ namespace SpotifyOpgaveCore.Controllers
             if (room == null)
             {
                 return View("~Home/Test");
-            }
-            _spotify = new SpotifyWebAPI()
+            }            _spotify = new SpotifyWebAPI()
             {
                 //TODO Get token from session
                 AccessToken = await HttpContext.GetTokenAsync("Spotify", "access_token"),
                 TokenType = "Bearer"
             };
+
+            PlaybackContext context = _spotify.GetPlayingTrack();
+            if (context.Item != null)
+                ViewBag.song = context.Item.Artists[0].Name + " - " + context.Item.Name;
 
 
             return View(room);
@@ -177,6 +180,7 @@ namespace SpotifyOpgaveCore.Controllers
         }
         public void Play(string access_token, string spotifyUri)
         {
+
             ErrorResponse error = _spotify.ResumePlayback(uris: new List<string> { spotifyUri });
         }
     }
