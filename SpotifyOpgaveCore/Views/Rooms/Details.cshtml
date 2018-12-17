@@ -3,7 +3,25 @@
 @{
     ViewData["Title"] = "Details";
 }
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+        $("#searchBox").on('input', function () {
+            $.ajax(
+                {
+                    url: "@Url.Action("Search")", // Controller/View
+                    data: { //Passing data
+                        searchString: $("#searchBox").val(), //Reading text box values using Jquery
 
+                },
+                success: function (data) {
+                    $("#list-result").html(data);
+                }
+            });
+            console.log("yo");
+
+        });
+    });
+</script>
 <h2>Details</h2>
 
 <div>
@@ -23,6 +41,15 @@
             @Html.DisplayFor(model => model.Name)
         </dd>
     </dl>
+</div>
+<div class="input-group input-group-sm mb-3">
+    <div class="input-group-prepend">
+        <span class="input-group-text" id="inputGroup-sizing-sm">Search</span>
+    </div>
+    <input type="text" id="searchBox" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+</div>
+<div id="list-result">
+    @Html.Partial("searchResult")
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.RoomId">Edit</a> |

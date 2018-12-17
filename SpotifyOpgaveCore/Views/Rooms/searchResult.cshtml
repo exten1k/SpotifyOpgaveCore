@@ -1,0 +1,49 @@
+﻿@model Room
+<script type="text/javascript"
+        src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script>
+    $(document).ready(function () {
+        $("a[name=tab]").on("click", function () {
+            $.ajax(
+                {
+                    type: "POST", //HTTP POST Method
+                    url: "Play", // Controller/View
+                    data: { //Passing data
+                        spotifyUri: $(this).data("index"), //Reading text box values using Jquery
+                    }
+                });
+            console.log("hey");
+        });
+    });
+</script>
+<table id="Grid" class="table table-striped table-bordered table-hover table-condensed">
+    <tbody>
+        @if (Model.FullTrack == null)
+        {
+            <p>Nothing here</p>
+        }
+        else
+        {
+            foreach (var item in @Model.FullTrack)
+            {
+                <tr>
+                    <td></td>
+                    <td>
+                        <div class="row" id="song" style="justify-content: space-between; padding:6px;">
+                            <a id="tab" data-index="@item.Uri" name="tab" href="#">@item.Artists[0].Name - @item.Name</a>
+
+                            <div>
+                                <a class="icon-thumbs-up" href="#" style="color:green;"></a>
+                                <a class="icon-thumbs-down" href="#" style="color:red;"></a>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        Stemmer
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+

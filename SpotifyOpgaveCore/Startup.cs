@@ -44,6 +44,8 @@ namespace SpotifyOpgaveCore
                 options.ClientSecret = "f11e461115a043769bfea0fc56384aee";
                 options.SaveTokens = true;
                 options.Scope.Add("playlist-modify-private");
+                options.Scope.Add("streaming");
+
                 options.UserInformationEndpoint = "https://api.spotify.com/v1/me";
 
                 options.Events = new OAuthEvents

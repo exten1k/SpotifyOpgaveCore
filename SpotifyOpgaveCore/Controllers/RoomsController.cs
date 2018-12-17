@@ -3,14 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using SpotifyOpgaveCore.Models;
+using Microsoft.AspNetCore.Http;
+using SpotifyAPI.Web;
+using SpotifyAPI.Web.Models;
+using SpotifyAPI.Web.Enums;
 
 namespace SpotifyOpgaveCore.Controllers
 {
     public class RoomsController : Controller
     {
+        private static SpotifyWebAPI _spotify;
         private readonly RoomContext _context;
 
         public RoomsController(RoomContext context)
@@ -38,6 +44,13 @@ namespace SpotifyOpgaveCore.Controllers
             {
                 return View("~Home/Test");
             }
+            _spotify = new SpotifyWebAPI()
+            {
+                //TODO Get token from session
+                AccessToken = await HttpContext.GetTokenAsync("Spotify", "access_token"),
+                TokenType = "Bearer"
+            };
+
 
             return View(room);
         }
@@ -147,6 +160,24 @@ namespace SpotifyOpgaveCore.Controllers
         private bool RoomExists(int id)
         {
             return _context.Rooms.Any(e => e.RoomId == id);
+        }
+
+        [HttpGet]
+        public ActionResult Search(Room searchResult, string access_token, string searchString)
+        {
+            //TODO SearchQuery i stedet for string "Eminem"
+            SearchItem item = _spotify.SearchItems(searchString, SearchType.Track);
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                searchResult.FullTrack = item.Tracks.Items;
+
+            }
+            return PartialView("searchResult", searchResult);
+        }
+        public void Play(string access_token, string spotifyUri)
+        {
+            ErrorResponse error = _spotify.ResumePlayback(uris: new List<string> { spotifyUri });
         }
     }
 }

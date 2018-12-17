@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using SpotifyAPI.Web.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SpotifyOpgaveCore.Models
 {
@@ -19,6 +21,8 @@ namespace SpotifyOpgaveCore.Models
         public string Owner { get; set; }
         public string Name { get; set; }
         private string Password { get; set; }
+        [NotMapped]
+        public List<FullTrack> FullTrack { get; set; }
 
         public ICollection<Song> Songs {get;set;}
     }
