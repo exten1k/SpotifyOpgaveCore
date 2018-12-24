@@ -21,6 +21,17 @@
 
         });
     });
+    setInterval(function GetContext() {
+        $.ajax(
+            {
+                url: "PlayingContext", // Controller/View
+                success: function (data) {
+                    $("#playerContext").html(data);
+                }
+
+            });
+        console.log("yo");
+    }, 2000);
 </script>
 <h2>Details</h2>
 
@@ -43,38 +54,9 @@
     </dl>
 </div>
 <h2>@Html.DisplayFor(model => model.Owner)'s Queue</h2>
-<table id="Grid" class="table table-dark table-hover table-condensed">
-    <tbody>
-        <tr>
-            <td>
 
-                <div class="btn-group col-3">
-                    <button onclick="Play('music.mp3','audio');" class="btn btn-custom"><span title="Play" id="play" class="icon-play aligned"></span></button>
-                    <button onclick="Stop('music.mp3','audio');" class="btn btn-custom"><span title="Stop" id="stop" class="icon-stop aligned"></span></button>
-                    <button onclick="Previous('music.mp3','audio');" class="btn btn-custom"><span title="Previous" id="previous" class="icon-step-backward aligned"></span></button>
-                    <button onclick="Next('music.mp3','audio');" class="btn btn-custom"><span title="Next" id="next" class="icon-step-forward aligned"></span></button>
-                    <button onclick="Backward5('music.mp3','audio');" class="btn btn-custom"><span title="-5 seconds" id="play" class="icon-fast-backward aligned"></span></button>
-                    <button onclick="Forward5('music.mp3','audio');" class="btn btn-custom"><span title="+5 seconds" id="play" class="icon-fast-forward aligned"></span></button>
-                    <button onclick="Backward1('music.mp3','audio');" class="btn btn-custom"><span title="-1 second" id="play" class="icon-chevron-left aligned"></span></button>
-                    <button onclick="Forward1('music.mp3','audio');" class="btn btn-custom"><span title="+1 second" id="play" class="icon-chevron-right aligned"></span></button>
-                    <button onclick="VolumeUp('music.mp3','audio');" class="btn btn-custom"><span title="Volume Up" id="volumeup" class="icon-plus aligned"></span></button>
-                    <button onclick="VolumeDown('music.mp3','audio');" class="btn btn-custom"><span title="Volume Down" id="volumedown" class="icon-minus aligned"></span></button>
-                    <i class="fa fa-spotify fa-2x" style="color: #1db954; margin-left:10px;"></i>
-                </div>
-
-
-            </td>
-            <td>
-                @ViewBag.song
-            </td>
-            <td>Stemmer</td>
-
-        </tr>
-    </tbody>
-
-</table>
-<div class="progress">
-    <div class="progress-bar progress-bar-striped progress-bar-animated" style="width:@ViewBag.progress%">@ViewBag.progress% </div>
+<div id="playerContext">
+    @Html.Partial("playingContext")
 </div>
 <div class="input-group input-group-sm mb-3">
     <div class="input-group-prepend">

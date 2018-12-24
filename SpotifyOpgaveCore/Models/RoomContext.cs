@@ -23,6 +23,8 @@ namespace SpotifyOpgaveCore.Models
         private string Password { get; set; }
         [NotMapped]
         public List<FullTrack> FullTrack { get; set; }
+        [NotMapped]
+        public PlaybackContext PlaybackContext { get; set; }
 
         public ICollection<Song> Songs {get;set;}
     }

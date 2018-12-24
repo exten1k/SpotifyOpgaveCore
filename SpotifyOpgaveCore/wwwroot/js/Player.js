@@ -5,6 +5,7 @@
             url: '/Player/Play',
         });
 }
+
 function Stop(music, id) {
     $.ajax(
         {

@@ -1,0 +1,54 @@
+﻿@model Room
+<script type="text/javascript"
+        src="https://code.jquery.com/jquery-1.12.4.js"></script>
+@*<script>
+    function GetContext() {
+            $.ajax(
+                {
+                    url: "@Url.Action("PlayingContext")", // Controller/View
+                success: function (data) {
+                    $("#playerContext").html(data);
+                    setTimeout(function () {
+                        GetContext();
+                    }, 10000);
+                    }
+
+            });
+        console.log("yo");
+    }
+
+</script>*@
+<table id="Grid" class="table table-dark table-hover table-condensed">
+    <tbody>
+        <tr>
+            <td>
+
+                <div class="btn-group col-3">
+                    <button onclick="Play('music.mp3','audio');" class="btn btn-custom"><span title="Play" id="play" class="icon-play aligned"></span></button>
+                    <button onclick="Stop('music.mp3','audio');" class="btn btn-custom"><span title="Stop" id="stop" class="icon-stop aligned"></span></button>
+                    <button onclick="Previous('music.mp3','audio');" class="btn btn-custom"><span title="Previous" id="previous" class="icon-step-backward aligned"></span></button>
+                    <button onclick="Next('music.mp3','audio');" class="btn btn-custom"><span title="Next" id="next" class="icon-step-forward aligned"></span></button>
+                    <button onclick="Backward5('music.mp3','audio');" class="btn btn-custom"><span title="-5 seconds" id="play" class="icon-fast-backward aligned"></span></button>
+                    <button onclick="Forward5('music.mp3','audio');" class="btn btn-custom"><span title="+5 seconds" id="play" class="icon-fast-forward aligned"></span></button>
+                    <button onclick="Backward1('music.mp3','audio');" class="btn btn-custom"><span title="-1 second" id="play" class="icon-chevron-left aligned"></span></button>
+                    <button onclick="Forward1('music.mp3','audio');" class="btn btn-custom"><span title="+1 second" id="play" class="icon-chevron-right aligned"></span></button>
+                    <button onclick="VolumeUp('music.mp3','audio');" class="btn btn-custom"><span title="Volume Up" id="volumeup" class="icon-plus aligned"></span></button>
+                    <button onclick="VolumeDown('music.mp3','audio');" class="btn btn-custom"><span title="Volume Down" id="volumedown" class="icon-minus aligned"></span></button>
+                    <i class="fa fa-spotify fa-2x" style="color: #1db954; margin-left:10px;"></i>
+                </div>
+
+
+            </td>
+            <td>
+                @ViewBag.song
+            </td>
+            <td>Stemmer</td>
+
+        </tr>
+    </tbody>
+
+</table>
+<div class="progress">
+    <div class="progress-bar progress-bar-striped progress-bar-animated" style="width:@ViewBag.progress%">@ViewBag.progress% </div>
+</div>
+

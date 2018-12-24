@@ -43,21 +43,12 @@ namespace SpotifyOpgaveCore.Controllers
             if (room == null)
             {
                 return View("~Home/Test");
-            }            _spotify = new SpotifyWebAPI()
+            } _spotify = new SpotifyWebAPI()
             {
                 //TODO Get token from session
                 AccessToken = await HttpContext.GetTokenAsync("Spotify", "access_token"),
                 TokenType = "Bearer"
             };
-
-            PlaybackContext context = _spotify.GetPlayingTrack();
-            if (context.Item != null)
-                ViewBag.song = context.Item.Artists[0].Name + " - " + context.Item.Name;
-            double dProgress = ((double)context.ProgressMs / context.Item.DurationMs) * 100.0;
-            int currentProgress = Convert.ToInt32(dProgress);
-            ViewBag.progress = currentProgress;
-
-
             return View(room);
         }
 
@@ -186,5 +177,17 @@ namespace SpotifyOpgaveCore.Controllers
 
             ErrorResponse error = _spotify.ResumePlayback(uris: new List<string> { spotifyUri });
         }
-    }
+
+        public ActionResult PlayingContext(Room room) {
+            room.PlaybackContext = _spotify.GetPlayingTrack();
+            if (room.PlaybackContext.Item != null)
+                ViewBag.song = room.PlaybackContext.Item.Artists[0].Name + " - " + room.PlaybackContext.Item.Name;
+            double dProgress = ((double)room.PlaybackContext.ProgressMs / room.PlaybackContext.Item.DurationMs) * 100.0;
+            int currentProgress = Convert.ToInt32(dProgress);
+            ViewBag.progress = currentProgress;
+
+            return PartialView("playingContext", room);
+
+        }
+    } 
 }
