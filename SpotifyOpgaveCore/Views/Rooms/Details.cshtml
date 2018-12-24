@@ -42,7 +42,7 @@
         </dd>
     </dl>
 </div>
-<h2>@User.Identity.Name's Queue</h2>
+<h2>@Html.DisplayFor(model => model.Owner)'s Queue</h2>
 <table id="Grid" class="table table-dark table-hover table-condensed">
     <tbody>
         <tr>
@@ -73,6 +73,9 @@
     </tbody>
 
 </table>
+<div class="progress">
+    <div class="progress-bar progress-bar-striped progress-bar-animated" style="width:@ViewBag.progress%">@ViewBag.progress% </div>
+</div>
 <div class="input-group input-group-sm mb-3">
     <div class="input-group-prepend">
         <span class="input-group-text" id="inputGroup-sizing-sm">Search</span>

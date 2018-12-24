@@ -53,6 +53,9 @@ namespace SpotifyOpgaveCore.Controllers
             PlaybackContext context = _spotify.GetPlayingTrack();
             if (context.Item != null)
                 ViewBag.song = context.Item.Artists[0].Name + " - " + context.Item.Name;
+            double dProgress = ((double)context.ProgressMs / context.Item.DurationMs) * 100.0;
+            int currentProgress = Convert.ToInt32(dProgress);
+            ViewBag.progress = currentProgress;
 
 
             return View(room);

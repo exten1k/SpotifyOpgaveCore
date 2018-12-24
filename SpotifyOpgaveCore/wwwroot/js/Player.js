@@ -28,7 +28,6 @@ function VolumeDown() {
         });
 }
 function Next() {
-
     $.ajax(
         {
             type: "POST", //HTTP POST Method

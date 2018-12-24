@@ -83,6 +83,8 @@ namespace SpotifyOpgaveCore
             app.UseStaticFiles();
             app.UseDeveloperExceptionPage();
             app.UseAuthentication();
+            app.UseHsts();
+            app.UseHttpsRedirection();
             app.UseMvcWithDefaultRoute();
         }
     }
