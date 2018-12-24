@@ -60,6 +60,9 @@ namespace SpotifyOpgaveCore
                         HttpResponseMessage response = await context.Backchannel.SendAsync(request, context.HttpContext.RequestAborted);
                         response.EnsureSuccessStatusCode();
 
+                        context.Properties.IsPersistent = true;
+                        context.Properties.ExpiresUtc = DateTimeOffset.UtcNow.AddDays(7);
+
                         var user = JObject.Parse(await response.Content.ReadAsStringAsync());
 
                         var name = user.Value<string>("display_name");
