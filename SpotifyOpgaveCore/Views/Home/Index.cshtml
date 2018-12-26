@@ -18,13 +18,46 @@
                     <h2>Join en playlist</h2>
                     <span class="close">&times;</span>
                     <p>Få koden til din vens playliste for at joine den så du kan stemme på de sange du gerne vil høre</p>
-                    <form action="@Url.Action("Details","Rooms")"method="post">
+                    <form action="@Url.Action("Details","Rooms")" method="post">
                         Indtast koden: <input type="text" name="ID"><br>
                         <input type="submit" value="Join playlist">
                     </form>
                 </div>
             </div>
+            @*TODO: Smid css et andet sted*@
+            <form>
+                <input type="button" value="Opret Playliste" onclick="window.location.href='http://spotify.a2hosted.com/Rooms/Create'" style="
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
+    height: 50%;
+    text-align: center;
+    -webkit-appearance: button;
+    cursor: pointer;
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.42857143;
+    margin-top: 10px;
+" />
+            </form>
         </div>
+
     }
 
     else
@@ -33,7 +66,7 @@
         <a class="btn btn-lg btn-success" href="/signin?returnUrl=%2F">Sign in</a>
 
     }
-    
+
 </div>
 
 <script src="~/js/modal.js"></script>
