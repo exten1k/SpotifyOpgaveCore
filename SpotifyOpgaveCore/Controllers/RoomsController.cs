@@ -180,11 +180,12 @@ namespace SpotifyOpgaveCore.Controllers
 
         public ActionResult PlayingContext(Room room) {
             room.PlaybackContext = _spotify.GetPlayingTrack();
-            if (room.PlaybackContext.Item != null)
+            if (room.PlaybackContext.Item != null) { 
                 ViewBag.song = room.PlaybackContext.Item.Artists[0].Name + " - " + room.PlaybackContext.Item.Name;
             double dProgress = ((double)room.PlaybackContext.ProgressMs / room.PlaybackContext.Item.DurationMs) * 100.0;
             int currentProgress = Convert.ToInt32(dProgress);
             ViewBag.progress = currentProgress;
+            }
 
             return PartialView("playingContext", room);
 
