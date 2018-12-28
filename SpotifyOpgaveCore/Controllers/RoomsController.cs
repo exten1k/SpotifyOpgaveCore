@@ -35,19 +35,19 @@ namespace SpotifyOpgaveCore.Controllers
         {
             if (id == null)
             {
-                return View("Home/Test");
+                return NotFound();
             }
 
             var room = await _context.Rooms
                 .SingleOrDefaultAsync(m => m.RoomId == id);
             if (room == null)
             {
-                return View("~Home/Test");
+                return NotFound();
             } _spotify = new SpotifyWebAPI()
             {
                 //TODO Get token from session
                 AccessToken = await HttpContext.GetTokenAsync("Spotify", "access_token"),
-                TokenType = "Bearer"
+                TokenType = "Bearer"   
             };
             return View(room);
         }
@@ -160,7 +160,7 @@ namespace SpotifyOpgaveCore.Controllers
         }
 
         [HttpGet]
-        public ActionResult Search(Room searchResult, string access_token, string searchString)
+        public ActionResult Search(Room searchResult, string access_token, string searchString, int id)
         {
             //TODO SearchQuery i stedet for string "Eminem"
             SearchItem item = _spotify.SearchItems(searchString, SearchType.Track);
@@ -178,7 +178,7 @@ namespace SpotifyOpgaveCore.Controllers
             ErrorResponse error = _spotify.ResumePlayback(uris: new List<string> { spotifyUri });
         }
 
-        public ActionResult PlayingContext(Room room) {
+        public ActionResult PlayingContext(Room room, int id) {
             room.PlaybackContext = _spotify.GetPlayingTrack();
             if (room.PlaybackContext.Item != null) { 
                 ViewBag.song = room.PlaybackContext.Item.Artists[0].Name + " - " + room.PlaybackContext.Item.Name;

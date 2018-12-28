@@ -35,7 +35,6 @@ namespace SpotifyOpgaveCore
             {
                 options.LoginPath = "/signin";
                 options.LogoutPath = "/signout";
-                options.ExpireTimeSpan = TimeSpan.FromHours(24);
             })
 
             .AddSpotify(options =>

@@ -24,7 +24,7 @@
     setInterval(function GetContext() {
         $.ajax(
             {
-                url: "PlayingContext", // Controller/View
+                url: "@Url.Action("PlayingContext")", // Controller/View
                 success: function (data) {
                     $("#playerContext").html(data);
                 }
