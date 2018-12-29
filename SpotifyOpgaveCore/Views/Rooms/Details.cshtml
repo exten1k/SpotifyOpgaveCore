@@ -54,10 +54,10 @@
     </dl>
 </div>
 <h2>@Html.DisplayFor(model => model.Owner)'s Queue</h2>
-
+@if(User.Identity.Name == Model.Owner) {
 <div id="playerContext">
     @Html.Partial("playingContext")
-</div>
+</div> }
 <div class="input-group input-group-sm mb-3">
     <div class="input-group-prepend">
         <span class="input-group-text" id="inputGroup-sizing-sm">Search</span>
