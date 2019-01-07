@@ -1,4 +1,4 @@
-﻿@model Room
+﻿@model SpotifyOpgaveCore.Models.Room
 <script type="text/javascript"
         src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script>
@@ -7,14 +7,17 @@
             $.ajax(
                 {
                     type: "POST", //HTTP POST Method
-                    url: "@Url.Action("Create","Songs", Model)", // Controller/View
+                    url: "@Url.Action("CreateSong","Rooms")", // Controller/View
                     data: { //Passing data
                         spotifyUri: $(this).data("index"),
-                        roomID: $(this).data("index2"),//Reading text box values using Jquery
+                        id: $(this).data("index2"),//Reading text box values using Jquery
                         songName: $(this).text(),
+                    },
+                    success: function (data) {
+                        $("#songList").html(data);
                     }
                 });
-            console.log("hey");
+            console.log("song addedd");
         });
     });
 </script>

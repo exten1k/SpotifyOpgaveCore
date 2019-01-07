@@ -26,7 +26,8 @@ namespace SpotifyOpgaveCore.Models
         [NotMapped]
         public PlaybackContext PlaybackContext { get; set; }
 
-        public ICollection<Song> Songs {get;set;}
+        public ICollection<Song> Songs { get; set; }
+        //public Song Song { get; set; }
     }
     public class Song
     {
@@ -35,8 +36,6 @@ namespace SpotifyOpgaveCore.Models
         public string ImageUrl { get; set; }
         public string Duration { get; set; }
         public int RoomId { get; set; }
-
-        public Room Room { get; set; }
 
         internal object FirstOrDefault(Func<object, bool> p)
         {

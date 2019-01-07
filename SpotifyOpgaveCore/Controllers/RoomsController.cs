@@ -44,7 +44,7 @@ namespace SpotifyOpgaveCore.Controllers
             {
                 return NotFound();
             }
-            
+
             ICollection<Song> songs = _context.Songs.Where(x => x.RoomId == id).ToList();
             _spotify = new SpotifyWebAPI()
             {
@@ -162,19 +162,20 @@ namespace SpotifyOpgaveCore.Controllers
             return _context.Rooms.Any(e => e.RoomId == id);
         }
 
-        [HttpGet]
-        public ActionResult Search(Room searchResult, string searchString, int id)
+        [HttpPost]
+        public async Task<ActionResult> Search(string searchString, int? id)
         {
-            //TODO SearchQuery i stedet for string "Eminem"
+            var room = await _context.Rooms
+                           .SingleOrDefaultAsync(m => m.RoomId == id);            //TODO SearchQuery i stedet for string "Eminem"
             SearchItem item = _spotify.SearchItems(searchString, SearchType.Track);
 
             if (!string.IsNullOrEmpty(searchString))
             {
-                searchResult.FullTrack = item.Tracks.Items;
+                room.FullTrack = item.Tracks.Items;
                 //searchResult.RoomId = id;
 
             }
-            return PartialView("searchResult", searchResult);
+            return PartialView("Search", room);
         }
         public void Play(string spotifyUri)
         {
@@ -182,10 +183,11 @@ namespace SpotifyOpgaveCore.Controllers
             ErrorResponse error = _spotify.ResumePlayback(uris: new List<string> { spotifyUri });
         }
 
-        public ActionResult PlayingContext(Room room, string spotifyUri, int id = 5)
+        public async Task<ActionResult> PlayingContext(string spotifyUri, int? id)
         {
+            var room = await _context.Rooms
+                          .SingleOrDefaultAsync(m => m.RoomId == id);
             room.PlaybackContext = _spotify.GetPlayingTrack();
-            //room.RoomId = id;
             if (room.PlaybackContext.Item != null)
             {
                 ViewBag.song = room.PlaybackContext.Item.Artists[0].Name + " - " + room.PlaybackContext.Item.Name;
@@ -204,19 +206,22 @@ namespace SpotifyOpgaveCore.Controllers
             return PartialView("playingContext", room);
 
         }
-        public async Task CreateSong(Room room, string spotifyUri, string songName, int roomID)
+        public async Task<IActionResult> CreateSong(string spotifyUri, string songName, int id)
         {
+            var room = await _context.Rooms
+                          .SingleOrDefaultAsync(m => m.RoomId == id);
             if (ModelState.IsValid)
             {
                 Song song = new Song();
-                song.RoomId = roomID;
+                song.RoomId = id;
                 song.Name = songName;
                 song.SongID = spotifyUri;
                 _context.Add(song);
                 await _context.SaveChangesAsync();
-
-
             }
+            ICollection<Song> songs = _context.Songs.Where(x => x.RoomId == id).ToList();
+
+            return PartialView("CreateSong", room);
         }
     }
 }
