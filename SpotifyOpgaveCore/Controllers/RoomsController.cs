@@ -44,6 +44,8 @@ namespace SpotifyOpgaveCore.Controllers
             {
                 return NotFound();
             }
+            
+            ICollection<Song> songs = _context.Songs.Where(x => x.RoomId == id).ToList();
             _spotify = new SpotifyWebAPI()
             {
                 //TODO Get token from session
