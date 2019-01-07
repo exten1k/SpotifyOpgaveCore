@@ -53,7 +53,7 @@ namespace SpotifyOpgaveCore.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public async void Create(Song song, string songName, string spotifyUri, int roomID)
+        public async Task Create(Song song, string spotifyUri, string songName, int roomID)
         {
             if (ModelState.IsValid)
             {
@@ -62,9 +62,9 @@ namespace SpotifyOpgaveCore.Controllers
                 song.SongID = spotifyUri;
                 _context.Add(song);
                 await _context.SaveChangesAsync();
-                //return RedirectToAction(nameof(Index));
+
+
             }
-            //return View(song);
         }
 
         // GET: Songs/Edit/5
