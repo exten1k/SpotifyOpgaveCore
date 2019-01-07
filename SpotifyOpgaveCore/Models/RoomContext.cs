@@ -34,5 +34,13 @@ namespace SpotifyOpgaveCore.Models
         public string Name { get; set; }
         public string ImageUrl { get; set; }
         public string Duration { get; set; }
+        public int RoomId { get; set; }
+
+        public Room Room { get; set; }
+
+        internal object FirstOrDefault(Func<object, bool> p)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

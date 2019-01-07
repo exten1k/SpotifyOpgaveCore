@@ -7,9 +7,11 @@
             $.ajax(
                 {
                     type: "POST", //HTTP POST Method
-                    url: "Play", // Controller/View
+                    url: "@Url.Action("Create","Songs", Model)", // Controller/View
                     data: { //Passing data
-                        spotifyUri: $(this).data("index"), //Reading text box values using Jquery
+                        spotifyUri: $(this).data("index"),
+                        roomID: $(this).data("index2"),//Reading text box values using Jquery
+                        songName: $(this).text(),
                     }
                 });
             console.log("hey");
@@ -30,7 +32,7 @@
                     <td></td>
                     <td>
                         <div class="row" id="song" style="justify-content: space-between; padding:6px;">
-                            <a id="tab" data-index="@item.Uri" name="tab" href="#">@item.Artists[0].Name - @item.Name</a>
+                            <a id="tab" data-index="@item.Uri" data-index2="@Model.RoomId" name="tab" href="#">@item.Artists[0].Name - @item.Name</a>
 
                             <div>
                                 <a class="icon-thumbs-up" href="#" style="color:green;"></a>

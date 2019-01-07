@@ -2,21 +2,17 @@
 <script type="text/javascript"
         src="https://code.jquery.com/jquery-1.12.4.js"></script>
 @*<script>
-    function GetContext() {
-            $.ajax(
-                {
-                    url: "@Url.Action("PlayingContext")", // Controller/View
+    setInterval(function GetContext() {
+        $.ajax(
+            {
+                url: "@Url.Action("PlayingContext")", // Controller/View
                 success: function (data) {
                     $("#playerContext").html(data);
-                    setTimeout(function () {
-                        GetContext();
-                    }, 10000);
-                    }
+                }
 
             });
-        console.log("yo");
-    }
-
+        console.log("aeer");
+    }, 2000);
 </script>*@
 <table id="Grid" class="table table-dark table-hover table-condensed">
     <tbody>

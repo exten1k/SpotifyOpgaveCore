@@ -43,11 +43,12 @@ namespace SpotifyOpgaveCore.Controllers
             if (room == null)
             {
                 return NotFound();
-            } _spotify = new SpotifyWebAPI()
+            }
+            _spotify = new SpotifyWebAPI()
             {
                 //TODO Get token from session
                 AccessToken = await HttpContext.GetTokenAsync("Spotify", "access_token"),
-                TokenType = "Bearer"   
+                TokenType = "Bearer"
             };
             return View(room);
         }
@@ -160,7 +161,7 @@ namespace SpotifyOpgaveCore.Controllers
         }
 
         [HttpGet]
-        public ActionResult Search(Room searchResult, string access_token, string searchString, int id)
+        public ActionResult Search(Room searchResult, string searchString, int id)
         {
             //TODO SearchQuery i stedet for string "Eminem"
             SearchItem item = _spotify.SearchItems(searchString, SearchType.Track);
@@ -168,27 +169,52 @@ namespace SpotifyOpgaveCore.Controllers
             if (!string.IsNullOrEmpty(searchString))
             {
                 searchResult.FullTrack = item.Tracks.Items;
+                //searchResult.RoomId = id;
 
             }
             return PartialView("searchResult", searchResult);
         }
-        public void Play(string access_token, string spotifyUri)
+        public void Play(string spotifyUri)
         {
-
+            //spotifyUri = "60SdxE8apGAxMiRrpbmLY0";
             ErrorResponse error = _spotify.ResumePlayback(uris: new List<string> { spotifyUri });
         }
 
-        public ActionResult PlayingContext(Room room, int id) {
+        public ActionResult PlayingContext(Room room, string spotifyUri, int id = 5)
+        {
             room.PlaybackContext = _spotify.GetPlayingTrack();
-            if (room.PlaybackContext.Item != null) { 
+            //room.RoomId = id;
+            if (room.PlaybackContext.Item != null)
+            {
                 ViewBag.song = room.PlaybackContext.Item.Artists[0].Name + " - " + room.PlaybackContext.Item.Name;
-            double dProgress = ((double)room.PlaybackContext.ProgressMs / room.PlaybackContext.Item.DurationMs) * 100.0;
-            int currentProgress = Convert.ToInt32(dProgress);
-            ViewBag.progress = currentProgress;
-            }
+                double dProgress = ((double)room.PlaybackContext.ProgressMs / room.PlaybackContext.Item.DurationMs) * 100.0;
+                int currentProgress = Convert.ToInt32(dProgress);
+                ViewBag.progress = currentProgress;
+                if (room.PlaybackContext.IsPlaying == false && room.PlaybackContext.ProgressMs == 0)
+                {
+                    spotifyUri = _context.Songs.FirstOrDefault(x => x.RoomId == id).SongID;
+                    Play(spotifyUri);
+                }
+                //var songs = _context.Songs.FirstOrDefault(x => x.RoomId == id).SongID;
 
+
+            }
             return PartialView("playingContext", room);
 
         }
-    } 
+        public async Task CreateSong(Room room, string spotifyUri, string songName, int roomID)
+        {
+            if (ModelState.IsValid)
+            {
+                Song song = new Song();
+                song.RoomId = roomID;
+                song.Name = songName;
+                song.SongID = spotifyUri;
+                _context.Add(song);
+                await _context.SaveChangesAsync();
+
+
+            }
+        }
+    }
 }

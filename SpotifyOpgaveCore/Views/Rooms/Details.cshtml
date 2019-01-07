@@ -8,7 +8,7 @@
         $("#searchBox").on('input', function () {
             $.ajax(
                 {
-                    url: "@Url.Action("Search")", // Controller/View
+                    url: "@Url.Action("Search", Model)", // Controller/View
                     data: { //Passing data
                         searchString: $("#searchBox").val(), //Reading text box values using Jquery
 
@@ -21,17 +21,6 @@
 
         });
     });
-    setInterval(function GetContext() {
-        $.ajax(
-            {
-                url: "@Url.Action("PlayingContext")", // Controller/View
-                success: function (data) {
-                    $("#playerContext").html(data);
-                }
-
-            });
-        console.log("yo");
-    }, 2000);
 </script>
 <h2>Details</h2>
 
@@ -55,8 +44,21 @@
 </div>
 <h2>@Html.DisplayFor(model => model.Owner)'s Queue</h2>
 @if(User.Identity.Name == Model.Owner) {
+<script>
+    setInterval(function GetContext() {
+        $.ajax(
+            {
+                url: "@Url.Action("PlayingContext")", // Controller/View
+                success: function (data) {
+                    $("#playerContext").html(data);
+                }
+
+            });
+        console.log("yo");
+    }, 2000);
+</script>
 <div id="playerContext">
-    @Html.Partial("playingContext")
+    @Html.Partial("playingContext",Model)
 </div> }
 <div class="input-group input-group-sm mb-3">
     <div class="input-group-prepend">
@@ -65,7 +67,7 @@
     <input type="text" id="searchBox" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
 </div>
 <div id="list-result">
-    @Html.Partial("searchResult")
+    @Html.Partial("searchResult",Model)
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.RoomId">Edit</a> |
