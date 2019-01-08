@@ -3,7 +3,7 @@
         src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script>
     $(document).ready(function () {
-        $("a[name=tab]").on("click", function () {
+        $("div[name=tab]").on("click", function () {
             $.ajax(
                 {
                     type: "POST", //HTTP POST Method
@@ -20,6 +20,40 @@
             console.log("song addedd");
         });
     });
+        $(document).ready(function () {
+        $("a[name=upvote]").on("click", function () {
+            $.ajax(
+                {
+                    type: "POST", //HTTP POST Method
+                    url: "@Url.Action("Upvote","Rooms")", // Controller/View
+                    data: { //Passing data
+                        songId: $(this).data("index"),
+                        id: $(this).data("index2"),//Reading text box values using Jquery
+                    },
+                    success: function (data) {
+                        $("#songList").html(data);
+                    }
+                });
+            console.log("song addedd");
+        });
+    });
+            $(document).ready(function () {
+        $("a[name=downvote]").on("click", function () {
+            $.ajax(
+                {
+                    type: "POST", //HTTP POST Method
+                    url: "@Url.Action("Downvote","Rooms")", // Controller/View
+                    data: { //Passing data
+                        songId: $(this).data("index"),
+                        id: $(this).data("index2"),//Reading text box values using Jquery
+                    },
+                    success: function (data) {
+                        $("#songList").html(data);
+                    }
+                });
+            console.log("vote removed");
+        });
+    });
 </script>
 <table id="Grid" class="table table-striped table-bordered table-hover table-condensed">
     <tbody>
@@ -31,23 +65,14 @@
         {
             foreach (var item in @Model.FullTrack)
             {
-                <tr>
-                    <td></td>
-                    <td>
-                        <div class="row" id="song" style="justify-content: space-between; padding:16px;">
-                            <a id="tab" data-index="@item.Uri" data-index2="@Model.RoomId" name="tab" href="#">@item.Artists[0].Name - @item.Name</a>
-
-                        <div>
-                            <a class="icon-thumbs-up" href="#" style="color:green;"></a>
-                            <a class="icon-thumbs-down" href="#" style="color:red;"></a>
-                        </div>
+            <tr>
+                <td>
+                    <a class="btn" href="#" style="color:green;font-size: 30px;" onclick="">+</a>
+                </td>
+                <td>
+                    <div class="row" id="song" style="justify-content: space-between; padding:16px;">
+                        <div id="tab" data-index="@item.Uri" data-index2="@Model.RoomId" name="tab" href="#">@item.Artists[0].Name - @item.Name</div>
                     </div>
-                </td>
-                <td>
-                    Stemmer
-                </td>
-                <td>
-                    <a class="btn" href="#" style="color:green;font-size: 30px;">+</a>
                 </td>
             </tr>
             }

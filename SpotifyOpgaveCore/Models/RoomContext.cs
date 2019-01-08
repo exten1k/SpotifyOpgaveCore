@@ -12,6 +12,7 @@ namespace SpotifyOpgaveCore.Models
         { }
         public DbSet<Room> Rooms { get; set; }
         public DbSet<Song> Songs { get; set; }
+        public DbSet<Vote> Votes { get; set; }
 
     }
 
@@ -31,15 +32,25 @@ namespace SpotifyOpgaveCore.Models
     }
     public class Song
     {
-        public string SongID { get; set; }
+        public int SongID { get; set; }
         public string Name { get; set; }
-        public string ImageUrl { get; set; }
-        public string Duration { get; set; }
+        public string SpotifyUri { get; set; }
         public int RoomId { get; set; }
+
+        public ICollection<Vote> Votes { get; set; }
+        //public int ValueValue { get; set; }
 
         internal object FirstOrDefault(Func<object, bool> p)
         {
             throw new NotImplementedException();
         }
+    }
+    public class Vote
+    {
+        public int VoteId { get; set; }
+        public int Value { get; set; }
+        public int SongID { get; set; }
+        public string UserId { get; set; }
+        public Song Song { get; set; }
     }
 }

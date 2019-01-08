@@ -33,7 +33,7 @@ namespace SpotifyOpgaveCore.Controllers
             }
 
             var song = await _context.Songs
-                .FirstOrDefaultAsync(m => m.SongID == id);
+                .FirstOrDefaultAsync(m => m.SpotifyUri == id);
             if (song == null)
             {
                 return NotFound();
@@ -59,7 +59,7 @@ namespace SpotifyOpgaveCore.Controllers
             {
                 song.RoomId = roomID;
                 song.Name = songName;
-                song.SongID = spotifyUri;
+                song.SpotifyUri = spotifyUri;
                 _context.Add(song);
                 await _context.SaveChangesAsync();
 
@@ -91,7 +91,7 @@ namespace SpotifyOpgaveCore.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, [Bind("SongID,Name,ImageUrl,Duration")] Song song)
         {
-            if (id != song.SongID)
+            if (id != song.SpotifyUri)
             {
                 return NotFound();
             }
@@ -105,7 +105,7 @@ namespace SpotifyOpgaveCore.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SongExists(song.SongID))
+                    if (!SongExists(song.SpotifyUri))
                     {
                         return NotFound();
                     }
@@ -128,7 +128,7 @@ namespace SpotifyOpgaveCore.Controllers
             }
 
             var song = await _context.Songs
-                .FirstOrDefaultAsync(m => m.SongID == id);
+                .FirstOrDefaultAsync(m => m.SpotifyUri == id);
             if (song == null)
             {
                 return NotFound();
@@ -150,7 +150,7 @@ namespace SpotifyOpgaveCore.Controllers
 
         private bool SongExists(string id)
         {
-            return _context.Songs.Any(e => e.SongID == id);
+            return _context.Songs.Any(e => e.SpotifyUri == id);
         }
     }
 }

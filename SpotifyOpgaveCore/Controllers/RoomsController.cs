@@ -47,12 +47,15 @@ namespace SpotifyOpgaveCore.Controllers
             }
 
             ICollection<Song> songs = _context.Songs.Where(x => x.RoomId == id).ToList();
+            ICollection<Vote> votes = _context.Votes.Where(x => x.Song.RoomId == id).ToList();
+            var voteValue = songs.Select(x => x.Votes.Select(f => f.Value));
+
             _spotify = new SpotifyWebAPI()
             {
                 //TODO Get token from session
                 AccessToken = await HttpContext.GetTokenAsync("Spotify", "access_token"),
                 TokenType = "Bearer",
-        };
+            };
             return View(room);
         }
 
@@ -178,10 +181,10 @@ namespace SpotifyOpgaveCore.Controllers
             }
             return PartialView("Search", room);
         }
-        public async Task Play(string spotifyUri,int id)
+        public async Task Play(string spotifyUri, int id)
         {
             var song = _context.Songs.FirstOrDefault(x => x.RoomId == id);
-            spotifyUri = song.SongID;
+            spotifyUri = song.SpotifyUri;
             ErrorResponse error = _spotify.ResumePlayback(uris: new List<string> { spotifyUri });
             _context.Remove(song);
             await _context.SaveChangesAsync();
@@ -214,16 +217,76 @@ namespace SpotifyOpgaveCore.Controllers
                           .SingleOrDefaultAsync(m => m.RoomId == id);
             if (ModelState.IsValid)
             {
-                Song song = new Song();
-                song.RoomId = id;
-                song.Name = songName;
-                song.SongID = spotifyUri;
-                _context.Add(song);
-                await _context.SaveChangesAsync();
+                if (_context.Songs.Any(o => o.SpotifyUri == spotifyUri && o.RoomId == id))
+                {
+
+                }
+                else
+                {
+                    Song song = new Song();
+                    song.RoomId = id;
+                    song.Name = songName;
+                    song.SpotifyUri = spotifyUri;
+                    _context.Add(song);
+                    await _context.SaveChangesAsync();
+                }
             }
             ICollection<Song> songs = _context.Songs.Where(x => x.RoomId == id).ToList();
+            var vote = _context.Votes.Where(x => x.SongID == id).Select(x=>x.Value);
 
             return PartialView("CreateSong", room);
+        }
+        public async Task<ActionResult> Upvote(int songId, int id)
+        {
+            var room = await _context.Rooms.SingleOrDefaultAsync(m => m.RoomId == id);
+            ICollection<Song> songs = _context.Songs.Where(x => x.RoomId == id).ToList();
+            ICollection<Vote> votes = _context.Votes.Where(x => x.Song.RoomId == id).ToList();
+            //var lastVote = songs.OrderByDescending(x => x.Votes.Select(m => m.VoteId)).Select(f => f.Votes.Select(k => k.Value).FirstOrDefault());
+            int lastVote = votes.Where(x => x.SongID == songId).OrderByDescending(f => f.VoteId).Select(m => m.Value).FirstOrDefault();
+
+            int newVote = lastVote + 1;
+            {
+                if (_context.Votes.Any(o => o.SongID == songId && o.UserId == User.Identity.Name))
+                {
+
+                }
+                else
+                {
+                    Vote vote = new Vote();
+                    vote.SongID = songId;
+                    vote.Value = newVote;
+                    vote.UserId = User.Identity.Name;
+                    _context.Add(vote);
+                    await _context.SaveChangesAsync();
+                }
+                    return PartialView("CreateSong", room);   
+            }
+        }
+        public async Task<ActionResult> Downvote(int songId, int id)
+        {
+            var room = await _context.Rooms.SingleOrDefaultAsync(m => m.RoomId == id);
+            ICollection<Song> songs = _context.Songs.Where(x => x.RoomId == id).ToList();
+            ICollection<Vote> votes = _context.Votes.Where(x => x.Song.RoomId == id).ToList();
+            //var lastVote = songs.OrderByDescending(x => x.Votes.Select(m => m.VoteId)).Select(f => f.Votes.Select(k => k.Value).FirstOrDefault());
+            int lastVote = votes.Where(x => x.SongID == songId).OrderByDescending(f => f.VoteId).Select(m => m.Value).FirstOrDefault();
+
+            int newVote = lastVote - 1;
+            {
+                if (_context.Votes.Any(o => o.SongID == songId && o.UserId == User.Identity.Name))
+                {
+
+                }
+                else
+                {
+                    Vote vote = new Vote();
+                    vote.SongID = songId;
+                    vote.Value = newVote;
+                    vote.UserId = User.Identity.Name;
+                    _context.Add(vote);
+                    await _context.SaveChangesAsync();
+                }
+                return PartialView("CreateSong", room);
+            }
         }
     }
 }
