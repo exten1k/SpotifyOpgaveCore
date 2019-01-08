@@ -85,6 +85,7 @@ namespace SpotifyOpgaveCore
                 options.SaveTokens = true;
                 options.Scope.Add("playlist-modify-private");
                 options.Scope.Add("streaming");
+                options.Scope.Add("user-modify-playback-state");
                 options.Scope.Add("user-read-playback-state");
                 options.Scope.Add("user-read-currently-playing");
 
