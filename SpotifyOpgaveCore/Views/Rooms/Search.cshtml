@@ -59,22 +59,22 @@
     <tbody>
         @if (Model.FullTrack == null)
         {
-            <p>Nothing here</p>
+            @*<p>Nothing here</p>*@
         }
         else
         {
             foreach (var item in @Model.FullTrack)
             {
-            <tr>
-                <td>
-                    <a class="btn" href="#" style="color:green;font-size: 30px;" onclick="">+</a>
-                </td>
-                <td>
-                    <div class="row" id="song" style="justify-content: space-between; padding:16px;">
-                        <div id="tab" data-index="@item.Uri" data-index2="@Model.RoomId" name="tab" href="#">@item.Artists[0].Name - @item.Name</div>
-                    </div>
-                </td>
-            </tr>
+                <tr>
+                    <td>
+                        <a class="btn" href="#" style="color:green;font-size: 30px;" onclick="">+</a>
+                    </td>
+                    <td>
+                        <div class="row" id="song" style="justify-content: space-between; padding:16px;">
+                            <div id="tab" data-index="@item.Uri" data-index2="@Model.RoomId" name="tab" href="#">@item.Artists[0].Name - @item.Name</div>
+                        </div>
+                    </td>
+                </tr>
             }
         }
     </tbody>

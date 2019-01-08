@@ -43,7 +43,16 @@
         <dd>
             @Html.DisplayFor(model => model.Name)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RoomId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RoomId)
+        </dd>
     </dl>
+    <div class="text-body">
+        For at invitere andre til din playliste skal de bruge dit room id som du kan se herover
+    </div>
 </div>
 <h2>@Html.DisplayFor(model => model.Owner)'s Queue</h2>
 @if(User.Identity.Name == Model.Owner) {
@@ -63,20 +72,21 @@
 <div id="playerContext">
     @Html.Partial("playingContext", Model)
 </div> }
+<div id="songList">
+    @Html.Partial("CreateSong", Model)
+
+</div>
 <div class="input-group input-group-sm mb-3">
     <div class="input-group-prepend">
-        <span class="input-group-text" id="inputGroup-sizing-sm">Search</span>
+        <span class="input-group-text" id="inputGroup-sizing-sm">Søg</span>
     </div>
     <input type="text" id="searchBox" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
 </div>
 <div id="list-result">
     @Html.Partial("Search", Model)
 </div>
-<div id="songList">
-    @Html.Partial("CreateSong",Model)
 
-</div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.RoomId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.RoomId">Rediger</a> 
+    @* <a asp-action="Index">Back to List</a>*@
 </div>

@@ -3,13 +3,12 @@
 <div class="jumbotron">
     @if (User?.Identity?.IsAuthenticated ?? false)
     {
-        <h1>Welcome, @User.Identity.Name</h1>
+        <h1>Velkommen, @User.Identity.Name</h1>
+        <div class="text-body">
+            Du er nu logget ind, og kan vælge at oprette eller joine en playliste.
+        </div>
 
-        <p>
-            @ViewBag.UserName
-            @ViewBag.Token
-        </p> @Html.ActionLink("Test", "Test")
-        <a class="btn btn-lg btn-danger" href="/signout?returnUrl=%2F">Sign out</a>
+
         <div class="col-6" style="text-align:center;">
             <button class="btn btn-primary" id="myBtn" style="height: 50%; text-align:center;">Join playlist</button>
 
@@ -57,16 +56,28 @@
 " />
             </form>
         </div>
-
+        <div class="text-body">
+            Du kan også vælge at logge ud igen
+        </div>
+        <div class="col-6" style="text-align:center;">
+            <a class="btn btn-lg btn-danger" href="/signout?returnUrl=%2F">Log af</a>
+        </div>
     }
 
     else
     {
-        <h1>Welcome, anonymous</h1>
-        <a class="btn btn-lg btn-success" href="/signin?returnUrl=%2F">Sign in</a>
+        <h1>Velkommen til vores webapplikation</h1>
+        <a class="btn btn-lg btn-success" href="/signin?returnUrl=%2F">Log ind</a>
+        <div class="text-body">
+            Denne opgave er lavet af Jurijs og Christoffer som hovedopgave på datamatiker studiet.
+            Vi har lavet en web-app, som minder lidt om en gammeldags jukebox.
+            Man kan oprette en playliste (ved at logge ind med spotify) og andre kan så se den playliste,
+            og stemme sange op som de gerne vil havde der skal afspilles.
+        </div>
+        <img src="~/Images/spotifyHovedopgave.png" style="max-width: 100%;" />
 
     }
 
 </div>
 
-<script src="~/js/modal.js"></script>
+        <script src="~/js/modal.js"></script>
