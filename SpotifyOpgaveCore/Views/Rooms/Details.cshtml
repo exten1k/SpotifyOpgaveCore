@@ -53,6 +53,9 @@
     <div class="text-body">
         For at invitere andre til din playliste skal de bruge dit room id som du kan se herover
     </div>
+    <div class="col-6" style="text-align:center;">
+        <a class="btn btn-lg btn-primary" href="#">START</a>
+    </div>
 </div>
 <h2>@Html.DisplayFor(model => model.Owner)'s Queue</h2>
 @if(User.Identity.Name == Model.Owner) {
@@ -69,6 +72,7 @@
         console.log("yo");
     }, 2000);
 </script>
+
 <div id="playerContext">
     @Html.Partial("playingContext", Model)
 </div> }
