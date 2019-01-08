@@ -15,7 +15,7 @@ namespace Spotify.Controllers
         [HttpGet("~/")]
         public async System.Threading.Tasks.Task<ActionResult> Index()
         {
-            ViewBag.UserName = await HttpContext.GetTokenAsync("Spotify", "refresh_token");
+            ViewBag.UserName = await HttpContext.GetTokenAsync("Spotify", "expires_at");
             return View();
         }
         [Authorize]

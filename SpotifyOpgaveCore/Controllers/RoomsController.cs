@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using SpotifyAPI.Web;
 using SpotifyAPI.Web.Models;
 using SpotifyAPI.Web.Enums;
+using SpotifyOpgaveCore.Extensions;
 
 namespace SpotifyOpgaveCore.Controllers
 {
@@ -50,8 +51,8 @@ namespace SpotifyOpgaveCore.Controllers
             {
                 //TODO Get token from session
                 AccessToken = await HttpContext.GetTokenAsync("Spotify", "access_token"),
-                TokenType = "Bearer"
-            };
+                TokenType = "Bearer",
+        };
             return View(room);
         }
 
@@ -177,13 +178,17 @@ namespace SpotifyOpgaveCore.Controllers
             }
             return PartialView("Search", room);
         }
-        public void Play(string spotifyUri)
+        public async Task Play(string spotifyUri,int id)
         {
-            //spotifyUri = "60SdxE8apGAxMiRrpbmLY0";
+            var song = _context.Songs.FirstOrDefault(x => x.RoomId == id);
+            spotifyUri = song.SongID;
             ErrorResponse error = _spotify.ResumePlayback(uris: new List<string> { spotifyUri });
+            _context.Remove(song);
+            await _context.SaveChangesAsync();
+
         }
 
-        public async Task<ActionResult> PlayingContext(string spotifyUri, int? id)
+        public async Task<ActionResult> PlayingContext(string spotifyUri, int id)
         {
             var room = await _context.Rooms
                           .SingleOrDefaultAsync(m => m.RoomId == id);
@@ -196,13 +201,10 @@ namespace SpotifyOpgaveCore.Controllers
                 ViewBag.progress = currentProgress;
                 if (room.PlaybackContext.IsPlaying == false && room.PlaybackContext.ProgressMs == 0)
                 {
-                    spotifyUri = _context.Songs.FirstOrDefault(x => x.RoomId == id).SongID;
-                    Play(spotifyUri);
+                    await Play(spotifyUri, id);
                 }
-                //var songs = _context.Songs.FirstOrDefault(x => x.RoomId == id).SongID;
-
-
             }
+
             return PartialView("playingContext", room);
 
         }

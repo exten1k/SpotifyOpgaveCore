@@ -30,6 +30,7 @@ namespace SpotifyOpgaveCore
         public void ConfigureServices(IServiceCollection services)
         {
 
+            services.AddDataProtection();
 
             services.AddAuthentication(options =>
             {
@@ -42,7 +43,7 @@ namespace SpotifyOpgaveCore
                 options.LogoutPath = "/signout";
                 options.Events = new CookieAuthenticationEvents
                 {
-                    OnValidatePrincipal = context =>
+                    OnValidatePrincipal = async context =>
                     {
                         if (context.Principal.Identity.IsAuthenticated)
                         {
@@ -61,17 +62,18 @@ namespace SpotifyOpgaveCore
                                 if (tokenResponse.IsError)
                                 {
                                     context.RejectPrincipal();
-                                    return Task.CompletedTask;
+                                    await Task.CompletedTask;
                                 }
                                 accessToken.Value = tokenResponse.AccessToken;
                                 var newExpires = DateTime.UtcNow + TimeSpan.FromSeconds(tokenResponse.ExpiresIn);
                                 exp.Value = newExpires.ToString("o", CultureInfo.InvariantCulture);
                                 context.Properties.StoreTokens(tokens);
                                 context.ShouldRenew = true;
-                                return Task.CompletedTask;
+                                await Task.CompletedTask;
                             }
                         }
-                        return Task.CompletedTask;
+                        await Task.CompletedTask;
+
                     }
                 };
             })
@@ -99,7 +101,7 @@ namespace SpotifyOpgaveCore
                         response.EnsureSuccessStatusCode();
 
                         context.Properties.IsPersistent = true;
-                        context.Properties.ExpiresUtc = DateTimeOffset.UtcNow.AddDays(7);
+                        context.Properties.ExpiresUtc = DateTimeOffset.UtcNow.AddHours(1);
 
                         var user = JObject.Parse(await response.Content.ReadAsStringAsync());
 
