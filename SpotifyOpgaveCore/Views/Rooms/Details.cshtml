@@ -23,6 +23,25 @@
 
         });
     });
+        $(document).ready(function () {
+        $("#play").on('click', function () {
+            $.ajax(
+                {
+                    type:"POST",
+                    url: "@Url.Action("Play", new { id = Model.RoomId })", // Controller/View
+                    dataType: 'html',
+                    data: { //Passing data
+
+
+                },
+                success: function (data) {
+                    $("#list-result").html(data);
+                }
+            });
+            console.log("yo");
+
+        });
+    });
 </script>
 
 <script>
@@ -80,7 +99,7 @@
         For at invitere andre til din playliste skal de bruge dit room id som du kan se herover
     </div>
     <div class="col-6" style="text-align:center;">
-        <a class="btn btn-lg btn-primary" href="#">START</a>
+        <a class="btn btn-lg btn-primary" id="play"href="#">START</a>
     </div>
 </div>
 <h2>@Html.DisplayFor(model => model.Owner)'s Queue</h2>
