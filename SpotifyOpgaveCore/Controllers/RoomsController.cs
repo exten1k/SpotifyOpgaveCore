@@ -94,6 +94,10 @@ namespace SpotifyOpgaveCore.Controllers
             }
 
             var room = await _context.Rooms.SingleOrDefaultAsync(m => m.RoomId == id);
+            if (User.Identity.Name != room.Owner)
+            {
+                return NotFound();
+            }
             if (room == null)
             {
                 return NotFound();
@@ -111,7 +115,10 @@ namespace SpotifyOpgaveCore.Controllers
             {
                 return NotFound();
             }
-
+            if (User.Identity.Name != room.Owner)
+            {
+                return NotFound();
+            }
             if (ModelState.IsValid)
             {
                 try
@@ -143,10 +150,12 @@ namespace SpotifyOpgaveCore.Controllers
             {
                 return NotFound();
             }
-
             var room = await _context.Rooms
                 .SingleOrDefaultAsync(m => m.RoomId == id);
-            if (room == null)
+            if (User.Identity.Name != room.Owner) {
+                return NotFound();
+            }
+                if (room == null)
             {
                 return NotFound();
             }
