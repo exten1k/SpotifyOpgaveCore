@@ -9,10 +9,10 @@
             $.ajax(
                 {
                     type:"POST",
-                    url: "@Url.Action("Search", new { id = Model.RoomId })", 
+                    url: "@Url.Action("Search", new { id = Model.RoomId })",
                     dataType: 'html',
-                    data: { 
-                        searchString: $("#searchBox").val(), 
+                    data: {
+                        searchString: $("#searchBox").val(),
 
                 },
                 success: function (data) {
@@ -28,9 +28,9 @@
             $.ajax(
                 {
                     type:"POST",
-                    url: "@Url.Action("Play", new { id = Model.RoomId })", 
+                    url: "@Url.Action("Play", new { id = Model.RoomId })",
                     dataType: 'html',
-                    data: { 
+                    data: {
 
 
                 },
@@ -65,15 +65,15 @@
         <h2>Details</h2>
         <h4>Room</h4>
         @if (User?.Identity?.IsAuthenticated ?? false)
-            {
-        <div class="" style="text-align:center;">
-            <p>Du er logged ind som @User.Identity.Name</p> <a class="btn btn-sm btn-danger" href="/signout?returnUrl=%2F">Log af</a>
+        {
+            <div class="" style="text-align:center;">
+                <p>Du er logged ind som @User.Identity.Name</p> <a class="btn btn-sm btn-danger" href="/signout?returnUrl=%2F">Log af</a>
 
-        </div>
+            </div>
 
-            }
+        }
     </div>
-    
+
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -97,18 +97,21 @@
     </dl>
     <div class="text-body">
         For at invitere andre til din playliste skal de bruge dit room id som du kan se herover
-    </div>
-    <div class="col-6" style="text-align:center;">
-        <a class="btn btn-lg btn-primary" id="play"href="#">START</a>
-    </div>
+    </div>    @if (User.Identity.Name == Model.Owner)
+    {
+
+        <div class="col-6" style="text-align:center;">
+            <a class="btn btn-lg btn-primary" id="play" href="#">START</a>
+        </div>}
 </div>
 <h2>@Html.DisplayFor(model => model.Owner)'s Queue</h2>
-@if(User.Identity.Name == Model.Owner) {
-<script>
+@if (User.Identity.Name == Model.Owner)
+{
+    <script>
     setInterval(function GetContext() {
         $.ajax(
             {
-                url: "@Url.Action("PlayingContext", new { id = Model.RoomId })", 
+                url: "@Url.Action("PlayingContext", new { id = Model.RoomId })",
                 success: function (data) {
                     $("#playerContext").html(data);
                 }
@@ -116,11 +119,11 @@
             });
         console.log("yo");
     }, 2000);
-</script>
+    </script>
 
-<div id="playerContext">
-    @Html.Partial("playingContext", Model)
-</div> }
+    <div id="playerContext">
+        @Html.Partial("playingContext", Model)
+    </div>      }
 <div id="songList">
     @Html.Partial("CreateSong", Model)
 
@@ -136,8 +139,9 @@
 </div>
 
 <div>
-    @if(User.Identity.Name == Model.Owner) {
-    <a asp-action="Edit" asp-route-id="@Model.RoomId">Rediger</a>
+    @if (User.Identity.Name == Model.Owner)
+    {
+        <a asp-action="Edit" asp-route-id="@Model.RoomId">Rediger</a>
     }
     @* <a asp-action="Index">Back to List</a>*@
 </div>
