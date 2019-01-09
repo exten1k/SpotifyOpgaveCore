@@ -1,25 +1,7 @@
 ﻿@model SpotifyOpgaveCore.Models.Room
 <script type="text/javascript"
         src="https://code.jquery.com/jquery-1.12.4.js"></script>
-@*<script>
-    $(document).ready(function () {
-        $("#searchBox").on('input', function () {
-            $.ajax(
-                {
-                    url: "@Url.Action("Create","Songs")", // Controller/View
-                    data: { //Passing data
-                        searchString: $("#searchBox").val(), //Reading text box values using Jquery
 
-                },
-                success: function (data) {
-                    $("#list-result").html(data);
-                }
-            });
-            console.log("yo");
-
-        });
-    });
-</script>*@
 <table id="Grid" class="table table-dark table-hover table-condensed">
     <tbody>
         <tr>
