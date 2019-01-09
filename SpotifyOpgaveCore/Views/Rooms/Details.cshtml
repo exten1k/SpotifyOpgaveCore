@@ -9,10 +9,10 @@
             $.ajax(
                 {
                     type:"POST",
-                    url: "@Url.Action("Search", new { id = Model.RoomId })", // Controller/View
+                    url: "@Url.Action("Search", new { id = Model.RoomId })", 
                     dataType: 'html',
-                    data: { //Passing data
-                        searchString: $("#searchBox").val(), //Reading text box values using Jquery
+                    data: { 
+                        searchString: $("#searchBox").val(), 
 
                 },
                 success: function (data) {
@@ -28,9 +28,9 @@
             $.ajax(
                 {
                     type:"POST",
-                    url: "@Url.Action("Play", new { id = Model.RoomId })", // Controller/View
+                    url: "@Url.Action("Play", new { id = Model.RoomId })", 
                     dataType: 'html',
-                    data: { //Passing data
+                    data: { 
 
 
                 },
@@ -108,7 +108,7 @@
     setInterval(function GetContext() {
         $.ajax(
             {
-                url: "@Url.Action("PlayingContext", new { id = Model.RoomId })", // Controller/View
+                url: "@Url.Action("PlayingContext", new { id = Model.RoomId })", 
                 success: function (data) {
                     $("#playerContext").html(data);
                 }

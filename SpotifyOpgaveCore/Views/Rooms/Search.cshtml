@@ -6,11 +6,11 @@
         $("a[name=add]").on("click", function () {
             $.ajax(
                 {
-                    type: "POST", //HTTP POST Method
-                    url: "@Url.Action("CreateSong","Rooms")", // Controller/View
-                    data: { //Passing data
+                    type: "POST", 
+                    url: "@Url.Action("CreateSong","Rooms")", 
+                    data: { 
                         spotifyUri: $(this).data("index"),
-                        id: $(this).data("index2"),//Reading text box values using Jquery
+                        id: $(this).data("index2"),
                         songName: $(this).data("index3"),
                     },
                     success: function (data) {
@@ -24,11 +24,11 @@
         $("a[name=upvote]").on("click", function () {
             $.ajax(
                 {
-                    type: "POST", //HTTP POST Method
-                    url: "@Url.Action("Upvote","Rooms")", // Controller/View
-                    data: { //Passing data
+                    type: "POST", 
+                    url: "@Url.Action("Upvote","Rooms")", 
+                    data: { 
                         songId: $(this).data("index"),
-                        id: $(this).data("index2"),//Reading text box values using Jquery
+                        id: $(this).data("index2"),
                     },
                     success: function (data) {
                         $("#songList").html(data);
@@ -41,11 +41,11 @@
         $("a[name=downvote]").on("click", function () {
             $.ajax(
                 {
-                    type: "POST", //HTTP POST Method
-                    url: "@Url.Action("Downvote","Rooms")", // Controller/View
-                    data: { //Passing data
+                    type: "POST", 
+                    url: "@Url.Action("Downvote","Rooms")", 
+                    data: { 
                         songId: $(this).data("index"),
-                        id: $(this).data("index2"),//Reading text box values using Jquery
+                        id: $(this).data("index2"),
                     },
                     success: function (data) {
                         $("#songList").html(data);
@@ -59,7 +59,6 @@
     <tbody>
         @if (Model.FullTrack == null)
         {
-            @*<p>Nothing here</p>*@
         }
         else
         {
