@@ -65,14 +65,14 @@
             <tr>
                 @if(User.Identity.Name == Model.Owner) { 
                 <td>
-                    <a class="btn" id="remove" data-index="@item.SongID" data-index2="@item.RoomId" href="#" name="remove" style="color:red; font-size:30px;">X</a>
+                    <a class="btn btn-sm btn-danger" id="remove" data-index="@item.SongID" data-index2="@item.RoomId" href="#" name="remove">Remove</a>
 
                 </td>
                 }
                 <td>
 
                     <div class="row" id="song" style="justify-content: space-between; padding:16px;">
-                        <a id="tab" data-index="@item.SongID" data-index2="@item.RoomId" name="tab" href="#">@item.Name</a>
+                        <div id="tab" data-index="@item.SongID" data-index2="@item.RoomId" name="tab" href="#">@item.Name</div>
                     </div>
                 </td>
                 <td>
