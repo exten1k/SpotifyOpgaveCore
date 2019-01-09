@@ -186,7 +186,7 @@ namespace SpotifyOpgaveCore.Controllers
         public async Task<ActionResult> Search(string searchString, int? id)
         {
             var room = await _context.Rooms
-                           .SingleOrDefaultAsync(m => m.RoomId == id);            //TODO SearchQuery i stedet for string "Eminem"
+                           .SingleOrDefaultAsync(m => m.RoomId == id);
             SearchItem item = _spotify.SearchItems(searchString, SearchType.Track);
 
             if (!string.IsNullOrEmpty(searchString))
@@ -216,6 +216,7 @@ namespace SpotifyOpgaveCore.Controllers
         {
             var room = await _context.Rooms
                           .SingleOrDefaultAsync(m => m.RoomId == id);
+            if(User.Identity.Name == room.Owner) { 
             room.PlaybackContext = _spotify.GetPlayingTrack();
             if (room.PlaybackContext.Item != null)
             {
@@ -228,7 +229,7 @@ namespace SpotifyOpgaveCore.Controllers
                     await Play(spotifyUri, id);
                 }
             }
-
+}
             return PartialView("playingContext", room);
 
         }
