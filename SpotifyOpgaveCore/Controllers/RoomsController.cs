@@ -45,11 +45,8 @@ namespace SpotifyOpgaveCore.Controllers
             {
                 return NotFound();
             }
-
-            ICollection<Song> songs = _context.Songs.Where(x => x.RoomId == id).ToList();
             ICollection<Vote> votes = _context.Votes.Where(x => x.Song.RoomId == id).ToList();
-            var voteValue = songs.Select(x => x.Votes.Select(f => f.Value));
-
+            ICollection<Song> songs = _context.Songs.Where(x => x.RoomId == id).SelectMany(vote=>vote.Votes).OrderByDescending(c=>c.Value).Select(x=>x.Song).ToList();
             _spotify = new SpotifyWebAPI()
             {
                 //TODO Get token from session
@@ -183,7 +180,8 @@ namespace SpotifyOpgaveCore.Controllers
         }
         public async Task Play(string spotifyUri, int id)
         {
-            var song = _context.Songs.FirstOrDefault(x => x.RoomId == id);
+            ICollection<Vote> votes = _context.Votes.Where(x => x.Song.RoomId == id).ToList();
+            var song = _context.Songs.Where(x => x.RoomId == id).SelectMany(vote => vote.Votes).OrderByDescending(c => c.Value).Select(x => x.Song).FirstOrDefault();
             spotifyUri = song.SpotifyUri;
             ErrorResponse error = _spotify.ResumePlayback(uris: new List<string> { spotifyUri });
             _context.Remove(song);
@@ -228,20 +226,23 @@ namespace SpotifyOpgaveCore.Controllers
                     song.Name = songName;
                     song.SpotifyUri = spotifyUri;
                     _context.Add(song);
+                    Vote vote = new Vote();
+                    vote.SongID = song.SongID;
+                    vote.Value = 0;
+                    vote.UserId = null;
+                    _context.Add(vote);
                     await _context.SaveChangesAsync();
                 }
             }
-            ICollection<Song> songs = _context.Songs.Where(x => x.RoomId == id).ToList();
-            var vote = _context.Votes.Where(x => x.SongID == id).Select(x=>x.Value);
+            ICollection<Song> songs = _context.Songs.Where(x => x.RoomId == id).SelectMany(vote => vote.Votes).OrderByDescending(c => c.Value).Select(x => x.Song).ToList();
 
             return PartialView("CreateSong", room);
         }
         public async Task<ActionResult> Upvote(int songId, int id)
         {
             var room = await _context.Rooms.SingleOrDefaultAsync(m => m.RoomId == id);
-            ICollection<Song> songs = _context.Songs.Where(x => x.RoomId == id).ToList();
             ICollection<Vote> votes = _context.Votes.Where(x => x.Song.RoomId == id).ToList();
-            //var lastVote = songs.OrderByDescending(x => x.Votes.Select(m => m.VoteId)).Select(f => f.Votes.Select(k => k.Value).FirstOrDefault());
+            ICollection<Song> songs = _context.Songs.Where(x => x.RoomId == id).SelectMany(vote => vote.Votes).OrderByDescending(c => c.Value).Select(x => x.Song).ToList();
             int lastVote = votes.Where(x => x.SongID == songId).OrderByDescending(f => f.VoteId).Select(m => m.Value).FirstOrDefault();
 
             int newVote = lastVote + 1;
@@ -265,7 +266,7 @@ namespace SpotifyOpgaveCore.Controllers
         public async Task<ActionResult> Downvote(int songId, int id)
         {
             var room = await _context.Rooms.SingleOrDefaultAsync(m => m.RoomId == id);
-            ICollection<Song> songs = _context.Songs.Where(x => x.RoomId == id).ToList();
+            ICollection<Song> songs = _context.Songs.Where(x => x.RoomId == id).SelectMany(vote => vote.Votes).OrderByDescending(c => c.Value).Select(x => x.Song).ToList();
             ICollection<Vote> votes = _context.Votes.Where(x => x.Song.RoomId == id).ToList();
             //var lastVote = songs.OrderByDescending(x => x.Votes.Select(m => m.VoteId)).Select(f => f.Votes.Select(k => k.Value).FirstOrDefault());
             int lastVote = votes.Where(x => x.SongID == songId).OrderByDescending(f => f.VoteId).Select(m => m.Value).FirstOrDefault();
