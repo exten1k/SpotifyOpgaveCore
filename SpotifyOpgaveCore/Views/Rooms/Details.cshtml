@@ -71,7 +71,19 @@
 </div>
 <h2>@Html.DisplayFor(model => model.Owner)'s Queue</h2>
 @if(User.Identity.Name == Model.Owner) {
+<script>
+    setInterval(function GetContext() {
+        $.ajax(
+            {
+                url: "@Url.Action("PlayingContext", new { id = Model.RoomId })", // Controller/View
+                success: function (data) {
+                    $("#playerContext").html(data);
+                }
 
+            });
+        console.log("yo");
+    }, 2000);
+</script>
 
 <div id="playerContext">
     @Html.Partial("playingContext", Model)
