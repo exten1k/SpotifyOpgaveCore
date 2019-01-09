@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SpotifyAPI.Web;
 using SpotifyAPI.Web.Models;
@@ -19,6 +20,9 @@ namespace SpotifyOpgaveCore.Controllers
         {
             return View();
         }
+
+        [Authorize]
+
         public async Task<string> GetDeviceAsync()
         {
             string deviceID = "";
@@ -39,12 +43,16 @@ namespace SpotifyOpgaveCore.Controllers
             }
             return deviceID;
         }
+        [Authorize]
+
         public async void Play()
         {
             string device = await GetDeviceAsync();
 
             ErrorResponse error = _spotify.ResumePlayback(device);
         }
+        [Authorize]
+
         public async void Pause()
         {
             string device = await GetDeviceAsync();
@@ -52,20 +60,26 @@ namespace SpotifyOpgaveCore.Controllers
             ErrorResponse error = _spotify.PausePlayback(device);
 
         }
+        [Authorize]
+
         public async void SkipToNext()
         {
             string device = await GetDeviceAsync();
             ErrorResponse error = _spotify.SkipPlaybackToNext(device);
         }
+        [Authorize]
+
         public async void SkipToPrev()
         {
             string device = await GetDeviceAsync();
             ErrorResponse error = _spotify.SkipPlaybackToPrevious(device);
         }
+        [Authorize]
+
         public async void VolumeControl(int volume)
         {
             string device = await GetDeviceAsync();
-            ErrorResponse error = _spotify.SetVolume(volume,device);
+            ErrorResponse error = _spotify.SetVolume(volume, device);
         }
 
     }

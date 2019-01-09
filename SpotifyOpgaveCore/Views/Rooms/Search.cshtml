@@ -3,7 +3,7 @@
         src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script>
     $(document).ready(function () {
-        $("div[name=tab]").on("click", function () {
+        $("a[name=add]").on("click", function () {
             $.ajax(
                 {
                     type: "POST", //HTTP POST Method
@@ -11,7 +11,7 @@
                     data: { //Passing data
                         spotifyUri: $(this).data("index"),
                         id: $(this).data("index2"),//Reading text box values using Jquery
-                        songName: $(this).text(),
+                        songName: $(this).data("index3"),
                     },
                     success: function (data) {
                         $("#songList").html(data);
@@ -67,7 +67,7 @@
             {
                 <tr>
                     <td>
-                        <a class="btn" href="#" style="color:green;font-size: 30px;" onclick="">+</a>
+                        <a class="btn" name="add" href="#" style="color:green;font-size: 30px;"data-index="@item.Uri" data-index2="@Model.RoomId" data-index3="@item.Artists[0].Name - @item.Name">+</a>
                     </td>
                     <td>
                         <div class="row" id="song" style="justify-content: space-between; padding:16px;">

@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\SongsController.cs" />
     <Compile Remove="Models\SearchViewModel.cs" />
   </ItemGroup>
 

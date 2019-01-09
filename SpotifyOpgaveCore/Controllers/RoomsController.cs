@@ -26,12 +26,15 @@ namespace SpotifyOpgaveCore.Controllers
         }
 
         // GET: Rooms
+        [Authorize]
+
         public async Task<IActionResult> Index()
         {
             return View(await _context.Rooms.ToListAsync());
         }
 
-        // GET: Rooms/Details/5
+        [Authorize]
+
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -57,6 +60,8 @@ namespace SpotifyOpgaveCore.Controllers
         }
 
         // GET: Rooms/Create
+        [Authorize]
+
         public IActionResult Create()
         {
             return View();
@@ -67,6 +72,8 @@ namespace SpotifyOpgaveCore.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
+
         public async Task<IActionResult> Create([Bind("RoomId,Owner,Name")] Room room)
         {
             if (ModelState.IsValid)
@@ -78,7 +85,7 @@ namespace SpotifyOpgaveCore.Controllers
             return View(room);
         }
 
-        // GET: Rooms/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -94,9 +101,8 @@ namespace SpotifyOpgaveCore.Controllers
             return View(room);
         }
 
-        // POST: Rooms/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("RoomId,Owner,Name")] Room room)
@@ -129,7 +135,8 @@ namespace SpotifyOpgaveCore.Controllers
             return View(room);
         }
 
-        // GET: Rooms/Delete/5
+        [Authorize]
+
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -147,7 +154,8 @@ namespace SpotifyOpgaveCore.Controllers
             return View(room);
         }
 
-        // POST: Rooms/Delete/5
+        [Authorize]
+
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -157,11 +165,13 @@ namespace SpotifyOpgaveCore.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        [Authorize]
 
         private bool RoomExists(int id)
         {
             return _context.Rooms.Any(e => e.RoomId == id);
         }
+        [Authorize]
 
         [HttpPost]
         public async Task<ActionResult> Search(string searchString, int? id)
@@ -178,6 +188,8 @@ namespace SpotifyOpgaveCore.Controllers
             }
             return PartialView("Search", room);
         }
+        [Authorize]
+
         public async Task Play(string spotifyUri, int id)
         {
             ICollection<Vote> votes = _context.Votes.Where(x => x.Song.RoomId == id).ToList();
@@ -188,6 +200,8 @@ namespace SpotifyOpgaveCore.Controllers
             await _context.SaveChangesAsync();
 
         }
+        [Authorize]
+
 
         public async Task<ActionResult> PlayingContext(string spotifyUri, int id)
         {
@@ -209,6 +223,8 @@ namespace SpotifyOpgaveCore.Controllers
             return PartialView("playingContext", room);
 
         }
+        [Authorize]
+
         public async Task<IActionResult> CreateSong(string spotifyUri, string songName, int id)
         {
             var room = await _context.Rooms
@@ -238,6 +254,23 @@ namespace SpotifyOpgaveCore.Controllers
 
             return PartialView("CreateSong", room);
         }
+        [Authorize]
+
+        public async Task<IActionResult> RemoveSong(int songId, int id)
+        {
+            var room = await _context.Rooms
+                          .SingleOrDefaultAsync(m => m.RoomId == id);
+            var song = _context.Songs.Where(x => x.SongID == songId).FirstOrDefault();
+
+            _context.Remove(song);
+                    await _context.SaveChangesAsync();
+
+            ICollection<Song> songs = _context.Songs.Where(x => x.RoomId == id).SelectMany(vote => vote.Votes).OrderByDescending(c => c.Value).Select(x => x.Song).ToList();
+
+            return PartialView("CreateSong", room);
+        }
+        [Authorize]
+
         public async Task<ActionResult> Upvote(int songId, int id)
         {
             var room = await _context.Rooms.SingleOrDefaultAsync(m => m.RoomId == id);
@@ -263,12 +296,13 @@ namespace SpotifyOpgaveCore.Controllers
                     return PartialView("CreateSong", room);   
             }
         }
+        [Authorize]
+
         public async Task<ActionResult> Downvote(int songId, int id)
         {
             var room = await _context.Rooms.SingleOrDefaultAsync(m => m.RoomId == id);
             ICollection<Song> songs = _context.Songs.Where(x => x.RoomId == id).SelectMany(vote => vote.Votes).OrderByDescending(c => c.Value).Select(x => x.Song).ToList();
             ICollection<Vote> votes = _context.Votes.Where(x => x.Song.RoomId == id).ToList();
-            //var lastVote = songs.OrderByDescending(x => x.Votes.Select(m => m.VoteId)).Select(f => f.Votes.Select(k => k.Value).FirstOrDefault());
             int lastVote = votes.Where(x => x.SongID == songId).OrderByDescending(f => f.VoteId).Select(m => m.Value).FirstOrDefault();
 
             int newVote = lastVote - 1;

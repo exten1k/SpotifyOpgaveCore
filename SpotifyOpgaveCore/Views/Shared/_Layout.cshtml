@@ -24,16 +24,24 @@
 <body>
     <div class="container">
         <div class="header">
-            
+
             <img src="~/images/banner.png" style="width: 100%" />
-        </div>
 
-        @RenderBody()
-        
-        <div class="footer">
-            <p>&copy; Hovedopgave 2018</p>
-        </div>
+            @if (User?.Identity?.IsAuthenticated ?? false)
+            {
+            <div class="col-sm-10" style="text-align:center;">
+                <p>Du er logged ind som @User.Identity.Name</p> <a class="btn btn-sm btn-danger" href="/signout?returnUrl=%2F">Log af</a>
 
-    </div>
+            </div>
+
+            }
+        </div>
+            @RenderBody()
+
+            <div class="footer">
+                <p>&copy; Hovedopgave 2018</p>
+            </div>
+
+        </div>
 </body>
 </html>

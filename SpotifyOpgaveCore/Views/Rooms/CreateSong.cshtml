@@ -1,5 +1,22 @@
 ﻿@model SpotifyOpgaveCore.Models.Room
 <script>
+             $(document).ready(function () {
+        $("a[name=remove]").on("click", function () {
+            $.ajax(
+                {
+                    type: "POST", //HTTP POST Method
+                    url: "@Url.Action("RemoveSong","Rooms")", // Controller/View
+                    data: { //Passing data
+                        songId: $(this).data("index"),
+                        id: $(this).data("index2"),//Reading text box values using Jquery
+                    },
+                    success: function (data) {
+                        $("#songList").html(data);
+                    }
+                });
+            console.log("song removed");
+        });
+    });
         $(document).ready(function () {
         $("a[name=upvote]").on("click", function () {
             $.ajax(
@@ -45,27 +62,33 @@
         {
             foreach (var item in @Model.Songs)
             {
-                <tr>
-                    <td>
-                        <div class="row" id="song" style="justify-content: space-between; padding:16px;">
-                            <a id="tab" data-index="@item.SongID" data-index2="@item.RoomId" name="tab" href="#" >@item.Name</a>
-                                </div>
-                            </td>
-                    <td>
-                        <a id="upvote" class="icon-thumbs-up" data-index="@item.SongID" data-index2="@item.RoomId" href="#" name="upvote" style="color:green;"></a>
+            <tr>
+                @if(User.Identity.Name == Model.Owner) { 
+                <td>
+                    <a class="btn" id="remove" data-index="@item.SongID" data-index2="@item.RoomId" href="#" name="remove" style="color:red; font-size:30px;">X</a>
 
-                        @if (item.Votes != null)
-                        {
+                </td>
+                }
+                <td>
+
+                    <div class="row" id="song" style="justify-content: space-between; padding:16px;">
+                        <a id="tab" data-index="@item.SongID" data-index2="@item.RoomId" name="tab" href="#">@item.Name</a>
+                    </div>
+                </td>
+                <td>
+                    <a id="upvote" class="icon-thumbs-up" data-index="@item.SongID" data-index2="@item.RoomId" href="#" name="upvote" style="color:green;"></a>
+
+                    @if (item.Votes != null)
+                    {
                         <h4> @item.Votes.OrderByDescending(x => x.VoteId).Select(f => f.Value).FirstOrDefault()</h4>
-                        }
-                        else
-                        {
-                            <h4>0</h4>
-                        }
-                        <a id="downvote" class="icon-thumbs-down" data-index="@item.SongID" data-index2="@item.RoomId" href="#" name="downvote" style="color:red;"></a>
-
-                    </td>
-                        </tr>
+                    }
+                    else
+                    {
+                        <h4>0</h4>
+                    }
+                    <a id="downvote" class="icon-thumbs-down" data-index="@item.SongID" data-index2="@item.RoomId" href="#" name="downvote" style="color:red;"></a>
+                </td>
+            </tr>
                     }
                 }
             </tbody>
