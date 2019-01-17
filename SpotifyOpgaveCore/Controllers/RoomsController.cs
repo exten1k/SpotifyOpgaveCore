@@ -17,7 +17,7 @@ namespace SpotifyOpgaveCore.Controllers
 {
     public class RoomsController : Controller
     {
-        private static SpotifyWebAPI _spotify;
+        //private static SpotifyWebAPI _spotify;
         private readonly RoomContext _context;
 
         public RoomsController(RoomContext context)
@@ -50,7 +50,7 @@ namespace SpotifyOpgaveCore.Controllers
             }
             ICollection<Vote> votes = _context.Votes.Where(x => x.Song.RoomId == id).ToList();
             ICollection<Song> songs = _context.Songs.Where(x => x.RoomId == id).SelectMany(vote=>vote.Votes).OrderByDescending(c=>c.Value).Select(x=>x.Song).ToList();
-            _spotify = new SpotifyWebAPI()
+           SpotifyWebAPI _spotify = new SpotifyWebAPI()
             {
                 //TODO Get token from session
                 AccessToken = await HttpContext.GetTokenAsync("Spotify", "access_token"),
@@ -185,6 +185,12 @@ namespace SpotifyOpgaveCore.Controllers
         [HttpPost]
         public async Task<ActionResult> Search(string searchString, int? id)
         {
+            SpotifyWebAPI _spotify = new SpotifyWebAPI()
+            {
+                //TODO Get token from session
+                AccessToken = await HttpContext.GetTokenAsync("Spotify", "access_token"),
+                TokenType = "Bearer",
+            };
             var room = await _context.Rooms
                            .SingleOrDefaultAsync(m => m.RoomId == id);
             SearchItem item = _spotify.SearchItems(searchString, SearchType.Track);
@@ -201,6 +207,12 @@ namespace SpotifyOpgaveCore.Controllers
 
         public async Task Play(string spotifyUri, int id)
         {
+            SpotifyWebAPI _spotify = new SpotifyWebAPI()
+            {
+                //TODO Get token from session
+                AccessToken = await HttpContext.GetTokenAsync("Spotify", "access_token"),
+                TokenType = "Bearer",
+            };
             ICollection<Vote> votes = _context.Votes.Where(x => x.Song.RoomId == id).ToList();
             var song = _context.Songs.Where(x => x.RoomId == id).SelectMany(vote => vote.Votes).OrderByDescending(c => c.Value).Select(x => x.Song).FirstOrDefault();
             spotifyUri = song.SpotifyUri;
@@ -214,6 +226,12 @@ namespace SpotifyOpgaveCore.Controllers
 
         public async Task<ActionResult> PlayingContext(string spotifyUri, int id)
         {
+            SpotifyWebAPI _spotify = new SpotifyWebAPI()
+            {
+                //TODO Get token from session
+                AccessToken = await HttpContext.GetTokenAsync("Spotify", "access_token"),
+                TokenType = "Bearer",
+            };
             var room = await _context.Rooms
                           .SingleOrDefaultAsync(m => m.RoomId == id);
             if(User.Identity.Name == room.Owner) { 
