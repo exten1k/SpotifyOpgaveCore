@@ -13,7 +13,7 @@ namespace SpotifyOpgaveCore.Controllers
 {
     public class PlayerController : Controller
     {
-        private static SpotifyWebAPI _spotify;
+        SpotifyWebAPI _spotify = new SpotifyWebAPI();
 
         // GET: Player
         public ActionResult Index()
